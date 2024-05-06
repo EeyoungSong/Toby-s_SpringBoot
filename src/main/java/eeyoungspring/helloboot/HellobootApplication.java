@@ -23,7 +23,8 @@ import java.io.IOException;
 public class HellobootApplication {
 	public static void main(String[] args) {
 		GenericApplicationContext applicationContext = new GenericApplicationContext();
-		applicationContext.registerBean(HelloController.class); // bean 클래스 지정해서 bean 등록
+		applicationContext.registerBean(HelloController.class);
+		applicationContext.registerBean(SimpleHelloService.class);// bean 클래스 지정해서 bean 등록
 		applicationContext.refresh(); // container 초기화
 
 		TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory(); // Tomcat 서블릿 컨테이너 띄우기
