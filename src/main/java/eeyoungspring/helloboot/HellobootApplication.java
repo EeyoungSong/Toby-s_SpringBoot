@@ -11,6 +11,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,18 +25,25 @@ import java.io.IOException;
 
 public class HellobootApplication {
 	public static void main(String[] args) {
-		GenericWebApplicationContext applicationContext = new GenericWebApplicationContext();
+		GenericWebApplicationContext applicationContext = new GenericWebApplicationContext() {
+			@Override
+			protected void onRefresh() {
+				super.onRefresh();
+				ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory(); // Tomcat 서블릿 컨테이너 띄우기
+				WebServer webServer = serverFactory.getWebServer(servletContext -> { // 매소드가 하나인 FunctionalInterface이기 때문에 람다식으로 대체 가능, servletContext 라는 파라미터 받기
+					servletContext.addServlet("dispatcherServlet",
+							new DispatcherServlet(this)
+					).addMapping("/*");
+				});
+				webServer.start();
+
+
+			}
+		};
 		applicationContext.registerBean(HelloController.class);
 		applicationContext.registerBean(SimpleHelloService.class);// bean 클래스 지정해서 bean 등록
 		applicationContext.refresh(); // spring container 초기화
 
-		TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory(); // Tomcat 서블릿 컨테이너 띄우기
-		WebServer webServer = serverFactory.getWebServer(servletContext -> { // 매소드가 하나인 FunctionalInterface이기 때문에 람다식으로 대체 가능, servletContext 라는 파라미터 받기
-			servletContext.addServlet("dispatcherServlet",
-						new DispatcherServlet(applicationContext)
-					).addMapping("/*");
-        });
-		webServer.start();
-	}
 
+	}
 }
