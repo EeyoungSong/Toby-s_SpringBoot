@@ -1,5 +1,6 @@
 package eeyoungspring.helloboot;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/hello")
+@MyComponent
 public class HelloController {
     private final HelloService helloService;
 
@@ -20,7 +22,6 @@ public class HelloController {
     @GetMapping
     @ResponseBody
     public String hello(String name) {
-        System.out.println("hello 접근!");
         return helloService.sayHello(Objects.requireNonNull(name)); // 파라미터가 null인지 아닌지 체크
     }
 }
