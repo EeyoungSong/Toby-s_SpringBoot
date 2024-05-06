@@ -25,7 +25,7 @@ public class HellobootApplication {
          	servletContext.addServlet("hello", new HttpServlet() { // 익명클래스 사용
 				 @Override
 				 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { // servlet 등록하는 코드
-					 String name = req.getParameter("name");
+					 String name = req.getParameter("name"); // request parameter 받을 수 있음
 
 					 resp.setStatus(HttpStatus.OK.value());
 					 resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // text 그냥 입력하는 건 오타의 위험이 있음 -> 미리 정의된 enum 활용
